@@ -1,9 +1,33 @@
+require 'json'
 require 'sinatra'
 
+Dir["#{__dir__}/lib/*.rb"].each { |file| load file }
+
 not_found do
-	'Seems like you are lost'
+  status 404
+  'Seems like you are lost'
 end
 
-get '/status' do
+get '/' do
+  status 200
   'Running OK'
+end
+
+post '/' do
+  content_type 'application/json;charset=utf-8'
+  return 401 unless request[:token] == ENV['SLACK_TOKEN']
+  status 200
+  text = request[:text].strip
+  command = request[:command]
+  channel = request[:channel_name]
+
+  case command
+  when '/gif'
+    build_slack_message('ephemeral', 'gifbot', "##{channel}", nil, ':trollface:', get_gif(text), nil)
+  when '/health'
+    build_slack_message('ephemeral', 'Dr. Who', "##{channel}", nil, ':pill:', get_health(text), nil)
+  else
+    {text: 'Unknown command :cry:'}
+  end.to_json
+
 end
