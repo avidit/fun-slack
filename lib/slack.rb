@@ -15,8 +15,8 @@ response_url=https://hooks.slack.com/commands/1234/5678
 
 '''
 
-def build_slack_message(response_type, username, channel, icon_url, icon_emoji, payload, attachments)
+def build_slack_message(response_type, username, channel, icon_url, icon_emoji, payload)
 	data = { username: username, channel: channel, text: payload }
 	(icon_url) ? (data['icon_url'] = icon_url) : (icon_emoji) ? (data['icon_emoji'] = icon_emoji) : data['icon_emoji'] = ':monkey_face:'
-	(attachments) ? data : data
+	data
 end
