@@ -14,7 +14,7 @@ get '/' do
 end
 
 post '/' do
-  content_type 'application/json'
+  content_type 'text/plain'
   return 401 unless request[:token] == ENV['SLACK_TOKEN']
   status 200
   text = request[:text].strip
