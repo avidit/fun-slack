@@ -14,7 +14,7 @@ get '/' do
 end
 
 post '/' do
-
+  content_type 'application/json'
   return 401 unless request[:token] == ENV['SLACK_TOKEN']
   status 200
   text = request[:text].strip
@@ -30,6 +30,6 @@ post '/' do
     build_slack_message('ephemeral', 'Dr. Who', "##{channel}", nil, ':pill:', get_health(text))
   else
     {text: 'Unknown command :cry:'}
-  end
+  end.to_json
 
 end
