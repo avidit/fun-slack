@@ -24,7 +24,7 @@ post '/' do
   case command
   when '/gif'
     data = build_slack_message('ephemeral', 'gifbot', "##{channel}", nil, ':trollface:', text)
-    data['attachments'] = [{image_url: get_gif(text)}]
+    data['attachments'] = [{fallback: ":cry:", image_url: get_gif(text)}]
     data
   when '/health'
     build_slack_message('ephemeral', 'Dr. Who', "##{channel}", nil, ':pill:', get_health(text))
