@@ -30,6 +30,6 @@ post '/' do
     build_slack_message('ephemeral', 'Dr. Who', "##{channel}", nil, ':pill:', get_health(text))
   else
     {text: 'Unknown command :cry:'}
-  end.to_json
+  end
 
 end
