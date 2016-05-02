@@ -25,8 +25,9 @@ post '/' do
   when '/ping'
     {text: 'pong'}
   when '/gif'
-    data = build_slack_message('ephemeral', 'gifbot', "##{channel}", nil, ':trollface:', text)
-    data['attachments'] = [{fallback: ":cry:", image_url: get_gif(text)}]
+    gif_url = get_gif(text)
+    data = build_slack_message('in_channel', 'gifbot', "##{channel}", nil, ':monkey:', text)
+    data['attachments'] = [{fallback: ':cry:', title: text, title_link: gif_url, image_url: gif_url}]
     data
   when '/health'
     build_slack_message('ephemeral', 'Dr. Who', "##{channel}", nil, ':pill:', get_health(text))
