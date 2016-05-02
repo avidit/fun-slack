@@ -14,22 +14,26 @@ get '/' do
 end
 
 post '/' do
-  content_type 'text/plain'
+  content_type 'application/json'
   return 401 unless request[:token] == ENV['SLACK_TOKEN']
   status 200
   text = request[:text].strip
   command = request[:command]
   channel = request[:channel_name]
 
-  case command
-  when '/gif'
-    data = build_slack_message('ephemeral', 'gifbot', "##{channel}", nil, ':trollface:', text)
-    data['attachments'] = [{fallback: ":cry:", image_url: get_gif(text)}]
-    data
-  when '/health'
-    build_slack_message('ephemeral', 'Dr. Who', "##{channel}", nil, ':pill:', get_health(text))
-  else
-    {text: 'Unknown command :cry:'}
-  end.to_json
+  reply = case command
+          when '/ping'
+            {text: 'pong'}
+          when '/gif'
+            data = build_slack_message('ephemeral', 'gifbot', "##{channel}", nil, ':trollface:', text)
+            data['attachments'] = [{fallback: ":cry:", image_url: get_gif(text)}]
+            data
+          when '/health'
+            build_slack_message('ephemeral', 'Dr. Who', "##{channel}", nil, ':pill:', get_health(text))
+          else
+            {text: 'Unknown command :cry:'}
+          end.to_json
+  puts reply
+  reply
 
 end

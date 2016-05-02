@@ -1,3 +1,4 @@
+require 'json'
 require 'net/http'
 
 def get_gif(query)
