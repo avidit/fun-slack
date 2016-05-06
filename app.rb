@@ -22,17 +22,36 @@ post '/' do
   channel = request[:channel_name]
 
   case command
+
   when '/ping'
     {text: 'pong'}
+
   when '/gif'
     gif_url = get_gif(text)
-    data = build_slack_message('in_channel', 'gifbot', "##{channel}", nil, ':monkey:', text)
-    data['attachments'] = [{fallback: ':cry:', title: text, title_link: gif_url, image_url: gif_url}]
-    data
+    reply = build_slack_message('in_channel', 'gifbot', "##{channel}", nil, ':monkey:', text)
+    reply['attachments'] = [{fallback: ':cry:', title: text, title_link: gif_url, image_url: gif_url}]
+    reply
+
+  when '/xkcd'
+    id = text.to_i
+    latest = get_xkcd['num']
+    data = if (id > 0) & (id != 404) & (id <= latest)
+               get_xkcd(id)
+             elsif text == 'latest'
+               get_xkcd
+             else
+               get_xkcd(rand(latest))
+             end
+    reply = build_slack_message('in_channel', 'xkcdbot', "##{channel}", nil, ':monkey:', '')
+    reply['attachments'] = [{fallback: data['alt'], title: data['safe_title'], title_link: data['img'], image_url: data['img']}]
+    reply
+
   when '/health'
     build_slack_message('ephemeral', 'Dr. Who', "##{channel}", nil, ':pill:', get_health(text))
+
   else
     {text: 'Unknown command :cry:'}
+
   end.to_json
 
 end

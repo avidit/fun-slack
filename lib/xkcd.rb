@@ -1,0 +1,7 @@
+require 'json'
+require 'net/http'
+
+def get_xkcd(id = nil)
+  id ? url = "http://xkcd.com/#{id}/info.0.json" : url = 'http://xkcd.com/info.0.json'
+  JSON.parse(Net::HTTP.get_response(URI.parse(url)).body)
+end
