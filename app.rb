@@ -36,14 +36,14 @@ post '/' do
     id = text.to_i
     latest = get_xkcd['num']
     data = if (id > 0) & (id != 404) & (id <= latest)
-               get_xkcd(id)
-             elsif text == 'latest'
-               get_xkcd
-             else
-               get_xkcd(rand(latest))
-             end
+             get_xkcd(id)
+           elsif text == 'latest'
+             get_xkcd
+           else
+             get_xkcd(rand(latest))
+           end
     reply = build_slack_message('in_channel', 'xkcdbot', "##{channel}", nil, ':monkey:', '')
-    reply['attachments'] = [{fallback: data['alt'], title: data['safe_title'], title_link: data['img'], image_url: data['img']}]
+    reply['attachments'] = [{fallback: data['alt'], title: data['safe_title'], title_link: "http://xkcd.com/#{data['num']}/", image_url: data['img']}]
     reply
 
   when '/health'
