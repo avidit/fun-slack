@@ -54,7 +54,7 @@ post '/' do
   when '/meme'
     if text.split.last.strip == 'templates'
       data = ''
-      list_templates.each { |k, v| data += "`#{k}` #{v}\n" }
+      list_templates.each { |k, v| data += "`#{k}` <http://memegen.link/#{k}|#{v}>\n" }
       build_slack_message('ephemeral', 'memebot', "##{channel}", nil, ':monkey:', data)
     else
       template, top, bottom = text.split(';').collect { |i| i.strip.sub(' ', '_') }
@@ -68,7 +68,7 @@ post '/' do
                                     title_link: "http://memegen.link/#{template}/#{top}/#{bottom}.jpg",
                                     image_url: "http://memegen.link/#{template}/#{top}/#{bottom}.jpg"
                                 }]
-
+        reply
       else
         build_slack_message('ephemeral', 'memebot', "##{channel}", nil, ':monkey:', 'Hint: `/meme templates`')
       end
