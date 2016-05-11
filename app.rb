@@ -43,8 +43,36 @@ post '/' do
              get_xkcd(rand(latest))
            end
     reply = build_slack_message('in_channel', 'xkcdbot', "##{channel}", nil, ':monkey:', '')
-    reply['attachments'] = [{fallback: data['alt'], title: data['safe_title'], title_link: "http://xkcd.com/#{data['num']}/", image_url: data['img']}]
+    reply['attachments'] = [{
+                                fallback: data['alt'],
+                                title: data['safe_title'],
+                                title_link: "http://xkcd.com/#{data['num']}/",
+                                image_url: data['img']
+                            }]
     reply
+
+  when '/meme'
+    if text.split.last.strip == 'templates'
+      data = ''
+      list_templates.each { |k, v| data += "`#{k}` #{v}\n" }
+      build_slack_message('ephemeral', 'memebot', "##{channel}", nil, ':monkey:', data)
+    else
+      template, top, bottom = text.split(';').collect { |i| i.strip.sub(' ', '_') }
+      top = '_' if top.to_s.empty?
+      bottom = '_' if bottom.to_s.empty?
+      if list_templates.keys.include? template
+        reply = build_slack_message('in_channel', 'memebot', "##{channel}", nil, ':monkey:', '')
+        reply['attachments'] = [{
+                                    fallback: 'Oops. Something went wrong.',
+                                    title: '',
+                                    title_link: "http://memegen.link/#{template}/#{top}/#{bottom}.jpg",
+                                    image_url: "http://memegen.link/#{template}/#{top}/#{bottom}.jpg"
+                                }]
+
+      else
+        build_slack_message('ephemeral', 'memebot', "##{channel}", nil, ':monkey:', 'Hint: `/meme templates`')
+      end
+    end
 
   when '/health'
     build_slack_message('ephemeral', 'Dr. Who', "##{channel}", nil, ':pill:', get_health(text))
