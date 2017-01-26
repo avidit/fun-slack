@@ -1,0 +1,6 @@
+{
+  "name": "slash-slack",
+  "description": "A collection of slash commands for slack",
+  "repository": "https://github.com/avidit/slash-slack",
+  "keywords": ["slack", "slash-slack", "gif", "xkcd", "meme"]
+}

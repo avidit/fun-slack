@@ -15,7 +15,7 @@ end
 
 post '/' do
   content_type 'application/json'
-  # return 401 unless request[:token] == ENV['SLACK_TOKEN']
+  return 401 unless request[:token] == ENV['SLACK_TOKEN']
   status 200
   text = request[:text].strip
   command = request[:command]
@@ -46,7 +46,7 @@ post '/' do
     reply['attachments'] = [{
                                 fallback: data['alt'],
                                 title: data['safe_title'],
-                                title_link: "http://xkcd.com/#{data['num']}/",
+                                title_link: "https://xkcd.com/#{data['num']}/",
                                 image_url: data['img']
                             }]
     reply
@@ -54,7 +54,7 @@ post '/' do
   when '/meme'
     if text.split.last.strip == 'templates'
       data = ''
-      list_templates.each { |k, v| data += "`#{k}` <http://memegen.link/#{k}.jpg|#{v}>\n" }
+      list_templates.each { |k, v| data += "`#{k}` <https://memegen.link/#{k}.jpg|#{v}>\n" }
       build_slack_message('ephemeral', 'memebot', "##{channel}", nil, ':monkey:', data)
     else
       template, top, bottom = text.split(';').collect { |i| i.strip.sub(' ', '_') }
@@ -65,8 +65,8 @@ post '/' do
         reply['attachments'] = [{
                                     fallback: 'Oops. Something went wrong.',
                                     title: '',
-                                    title_link: "http://memegen.link/#{template}/#{top}/#{bottom}.jpg",
-                                    image_url: "http://memegen.link/#{template}/#{top}/#{bottom}.jpg"
+                                    title_link: "https://memegen.link/#{template}/#{top}/#{bottom}.jpg",
+                                    image_url: "https://memegen.link/#{template}/#{top}/#{bottom}.jpg"
                                 }]
         reply
       else

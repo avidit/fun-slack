@@ -3,7 +3,7 @@ require 'net/http'
 
 
 def get_templates
-  url = 'http://memegen.link/templates/'
+  url = 'https://memegen.link/templates/'
   JSON.parse(Net::HTTP.get_response(URI.parse(url)).body)
 end
 
